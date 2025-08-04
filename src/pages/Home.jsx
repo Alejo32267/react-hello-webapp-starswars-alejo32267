@@ -3,8 +3,8 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Characters from "../components/Characters";
+import { Navbar } from "../components/Navbar";
 
-// Función para obtener personajes
 const listCharacters = () =>
   fetch("https://swapi.tech/api/people")
     .then(res => res.json())
@@ -13,6 +13,7 @@ const listCharacters = () =>
 export const Home = () => {
   const { store, dispatch } = useGlobalReducer();
   const [personajes, setPersonajes] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
 
   useEffect(() => {
     listCharacters()
@@ -20,20 +21,30 @@ export const Home = () => {
       .catch(err => console.error(err));
   }, []);
 
-  return (
-    <div className="container">
-      <div className="d-flex overflow-auto gap-3 p-3">
-        {personajes.map((p) => (
-          <div key={p.uid} className="flex-shrink-0">
-            <Characters
-              uid={p.uid}
-              nombre={p.name}
-              url={p.url}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
+ const addFavorite = (name) => {
+  if (!favoritos.includes(name)) {
+    setFavoritos([...favoritos, name]);
+  }
+};
 
+  return (
+    <>
+      {/* Pasa favoritos al Navbar para que pueda mostrar los favoritos */}
+      <Navbar favoritos={favoritos} />
+
+      <div className="container">
+        <div className="d-flex overflow-auto gap-3 p-3">
+          {personajes.map((p) => (
+            <div key={p.uid} className="flex-shrink-0">
+              <Characters
+                uid={p.uid}
+                nombre={p.name}
+                addFavorite={addFavorite}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 };
