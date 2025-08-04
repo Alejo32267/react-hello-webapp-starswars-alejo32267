@@ -1,16 +1,16 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as solidHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as regularHeart } from "@fortawesome/free-regular-svg-icons";
 
-const Characters = ({ uid, nombre, addFavorite }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+const Characters = ({ uid, nombre, addFavorite, removeFavorite, isFavorite }) => {
 
   const toggleFavorite = () => {
-    if (!isFavorite && addFavorite) {
-      addFavorite(uid +"- "+ nombre);
+    if (!isFavorite) {
+      addFavorite(nombre);
+    } else {
+      removeFavorite(nombre);
     }
-    setIsFavorite(!isFavorite);
   };
 
   return (
@@ -20,13 +20,12 @@ const Characters = ({ uid, nombre, addFavorite }) => {
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h5 className="card-title mb-0">Name: {nombre}</h5>
           <FontAwesomeIcon
-            icon={faHeart}
+            icon={isFavorite ? solidHeart : regularHeart}
             onClick={toggleFavorite}
             style={{
               fontSize: '1.5rem',
               color: isFavorite ? 'red' : 'gray',
-              cursor: 'pointer',
-              transition: 'color 0.3s'
+              cursor: 'pointer'
             }}
           />
         </div>
