@@ -29,7 +29,6 @@ export const Home = () => {
               uid={p.uid}
               nombre={p.name}
               url={p.url}
-              gender={p.gender}
             />
           </div>
         ))}
